@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+
+# Generated data/models
+models/
