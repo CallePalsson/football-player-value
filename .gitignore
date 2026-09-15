@@ -4,6 +4,8 @@ __pycache__/
 *.pyc
 underlag/
 *.pkl
+football.db
+
 # OS
 .DS_Store
 Thumbs.db
