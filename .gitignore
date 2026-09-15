@@ -3,7 +3,7 @@ __pycache__/
 .ipynb_checkpoints/
 *.pyc
 underlag/
-
+*.pkl
 # OS
 .DS_Store
 Thumbs.db
