@@ -6,9 +6,19 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 import './wallet.css'
 import './form.css'
+import './prediction.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [isEvaluated, setIsEvaluted] = useState(false);
+
+  const handleGetValuation = (e) => {
+    if (e) e.preventDefault();
+    setIsEvaluted(true);
+  };
+  const handleReset = () => {
+    setIsEvaluted(false);
+  };
 
   return (
     <>
@@ -20,7 +30,6 @@ function App() {
         <span>Football</span> Valuation
       </h1>
 
-
       {/* <span className='input'>
         <input type="text" name="text" className="input" placeholder="Age"></input>
         <input type="text" name="text" className="input" placeholder="Position"></input>
@@ -30,209 +39,230 @@ function App() {
         <button>Submit</button>
       </span> */}
 
-      <div className="login-box">
-        <p>Valuation</p>
-        <form>
-          <div className="user-box">
-            <input required="" name="goals" type="number" />
-            <label>Goals</label>
-          </div>
-          <div className="user-box">
-            <input required="" name="assists" type="number" />
-            <label>Assists</label>
-          </div>
-          <div className="user-box">
-            <input required="" name="league" type="text" />
-            <label>League</label>
-          </div>
-          <div className="user-box">
-            <input required="" name="position" type="text" />
-            <label>Position</label>
-          </div>
-          <div className="user-box">
-            <input required="" name="games" type="number" />
-            <label>Games</label>
-          </div>
-          <div className="user-box">
-            <input required="" name="age" type="number" />
-            <label>Age</label>
-          </div>
-          <a href="#">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            Get Valuation
-          </a>
-        </form>
-        <p>See other <a href="#" className="a2">Valuations</a></p>
-      </div>
-
-      
-
-              <>
-  <div className="login-box">
-    <p>Valuation</p>
-    <form>
-      <div className="user-box">
-        <input required="" name="goals" type="number" />
-        <label>Goals</label>
-      </div>
-      <div className="user-box">
-        <input required="" name="assists" type="number" />
-        <label>Assists</label>
-      </div>
-      <div className="user-box">
-        <input required="" name="league" type="text" />
-        <label>League</label>
-      </div>
-      <div className="user-box">
-        <input required="" name="position" type="text" />
-        <label>Position</label>
-      </div>
-      <div className="user-box">
-        <input required="" name="games" type="number" />
-        <label>Games</label>
-      </div>
-      <div className="user-box">
-        <input required="" name="age" type="number" />
-        <label>Age</label>
-      </div>
-      <a href="#">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        Get Valuation
-      </a>
-    </form>
-    <p>See other <a href="#" className="a2">Valuations</a></p>
-  </div>
-
-
-  
-
-
-  <div className="app-container"> 
-    <div className="wallet">
-      <div className="wallet-back"></div>
-
-      <div className="card stripe">
-        <div className="card-inner">
-          <div className="card-top">
-            <span>Osby BK</span>
-            <div className="chip"></div>
-          </div>
-          <div className="card-bottom">
-            <div className="card-info">
-              <span className="label">Player Name</span>
-              <span className="value">Calle Pålsson</span>
+      {!isEvaluated ? (
+        <div className="login-box">
+          <p>Valuation</p>
+          <form onSubmit={handleGetValuation}>
+            <div className="user-box">
+              <input required="" name="goals" type="number" />
+              <label>Goals</label>
             </div>
-            <div className="card-number-wrapper">
-              <span className="hidden-stars">**** 4242</span>
-              <span className="card-number">$500 000</span>
+            <div className="user-box">
+              <input required="" name="assists" type="number" />
+              <label>Assists</label>
+            </div>
+            <div className="user-box">
+              <input required="" name="league" type="text" />
+              <label>League</label>
+            </div>
+            <div className="user-box">
+              <input required="" name="position" type="text" />
+              <label>Position</label>
+            </div>
+            <div className="user-box">
+              <input required="" name="games" type="number" />
+              <label>Games</label>
+            </div>
+            <div className="user-box">
+              <input required="" name="age" type="number" />
+              <label>Age</label>
+            </div>
+            <a href="#" onClick={handleGetValuation}>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              Get Valuation
+            </a>
+          </form>
+          <p>See other <a href="#" className="a2">Valuations</a></p>
+        </div>
+      ) : (
+        <div className="price-card">
+          <div className="price-card-glow"></div>
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div className="price-card-header">
+              <div className="price-card-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m12 7 4 3-1.5 5h-5L8 10z" />
+                  <path d="M12 2v5" />
+                  <path d="m16 10 5-1.5" />
+                  <path d="m14.5 15 3.5 4" />
+                  <path d="m9.5 15-3.5 4" />
+                  <path d="m8 10-5-1.5" />
+                </svg>
+              </div>
+              <div>
+                <p className="price-card-title">Price Prediction</p>
+                <p className="price-card-subtitle">Calle Pålsson</p>
+              </div>
+            </div>
+
+            <div className="price-card-worth">
+              <p className="price-card-label">Estimated Worth</p>
+              <p className="price-card-val">$120,818</p>
+            </div>
+
+            <div className="price-card-graph">
+              <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="aurora-gradient-v2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a3e635" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#a3e635" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M0,65 C50,20 80,80 150,70 S250,50 300,85"
+                  fill="none"
+                  stroke="#a3e635"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M0,100 L0,65 C50,20 80,80 150,70 S250,50 300,85 L300,100 Z"
+                  fill="url(#aurora-gradient-v2)"
+                />
+              </svg>
+              <div className="price-card-dot"></div>
+            </div>
+
+            <div className="price-card-footer">
+              <button className="price-card-btn" onClick={handleReset}>
+                View Full Report
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
+      <div className="app-container"> 
+        <div className="wallet">
+          <div className="wallet-back"></div>
 
-      <div className="card wise">
-        <div className="card-inner">
-          <div className="card-top">
-            <span>Barcelona</span>
-            <div className="chip"></div>
-          </div>
-          <div className="card-bottom">
-            <div className="card-info">
-              <span className="label">Player Name</span>
-              <span className="value">Lamine Yamal</span>
-            </div>
-            <div className="card-number-wrapper">
-              <span className="hidden-stars">**** 8810</span>
-              <span className="card-number">$200 000 000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="card paypal">
-        <div className="card-inner">
-          <div className="card-top">
-            <span>Paris Saint<b style={{ color: '#0079C1' }}> Germain</b></span>
-            <div className="chip"></div>
-          </div>
-          <div className="card-bottom">
-            <div className="card-info">
-              <span className="label">Player Name</span>
-              <span className="value">Kylian Mbappe</span>
-            </div>
-            <div className="card-number-wrapper">
-              <span className="hidden-stars">**** 0094</span>
-              <span className="card-number">$120 000 000</span>
+          <div className="card stripe">
+            <div className="card-inner">
+              <div className="card-top">
+                <span>Osby BK</span>
+                <div className="chip"></div>
+              </div>
+              <div className="card-bottom">
+                <div className="card-info">
+                  <span className="label">Player Name</span>
+                  <span className="value">Calle Pålsson</span>
+                </div>
+                <div className="card-number-wrapper">
+                  <span className="hidden-stars">**** 4242</span>
+                  <span className="card-number">$500 000</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="pocket">
-        <svg className="pocket-svg" viewBox="0 0 280 160" fill="none">
-          <path
-            d="M 0 20 C 0 10, 5 10, 10 10 C 20 10, 25 25, 40 25 L 240 25 C 255 25, 260 10, 270 10 C 275 10, 280 10, 280 20 L 280 120 C 280 155, 260 160, 240 160 L 40 160 C 20 160, 0 155, 0 120 Z"
-            fill="#1e341e"
-          />
-          <path
-            d="M 8 22 C 8 16, 12 16, 15 16 C 23 16, 27 29, 40 29 L 240 29 C 253 29, 257 16, 265 16 C 268 16, 272 16, 272 22 L 272 120 C 272 150, 255 152, 240 152 L 40 152 C 25 152, 8 152, 8 120 Z"
-            stroke="#3d5635"
-            strokeWidth="1.5"
-            strokeDasharray="6 4"
-          />
-        </svg>
-        <div className="pocket-content">
-          <div style={{ position: 'relative', height: '24px', width: '100%' }}>
-            <div className="balance-stars">******</div>
-            <div className="balance-real">$12,450.00</div>
+          <div className="card wise">
+            <div className="card-inner">
+              <div className="card-top">
+                <span>Barcelona</span>
+                <div className="chip"></div>
+              </div>
+              <div className="card-bottom">
+                <div className="card-info">
+                  <span className="label">Player Name</span>
+                  <span className="value">Lamine Yamal</span>
+                </div>
+                <div className="card-number-wrapper">
+                  <span className="hidden-stars">**** 8810</span>
+                  <span className="card-number">$200 000 000</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style={{ color: '#698263', fontSize: '12px', fontWeight: 500 }}>
-            Average Market Value
+
+          <div className="card paypal">
+            <div className="card-inner">
+              <div className="card-top">
+                <span>Paris Saint<b style={{ color: '#0079C1' }}> Germain</b></span>
+                <div className="chip"></div>
+              </div>
+              <div className="card-bottom">
+                <div className="card-info">
+                  <span className="label">Player Name</span>
+                  <span className="value">Kylian Mbappe</span>
+                </div>
+                <div className="card-number-wrapper">
+                  <span className="hidden-stars">**** 0094</span>
+                  <span className="card-number">$120 000 000</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="eye-icon-wrapper">
-            <svg
-              className="eye-icon eye-slash"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle cx="12" cy="12" r="3" />
-              <line x1="3" y1="3" x2="21" y2="21" />
+
+          <div className="pocket">
+            <svg className="pocket-svg" viewBox="0 0 280 160" fill="none">
+              <path
+                d="M 0 20 C 0 10, 5 10, 10 10 C 20 10, 25 25, 40 25 L 240 25 C 255 25, 260 10, 270 10 C 275 10, 280 10, 280 20 L 280 120 C 280 155, 260 160, 240 160 L 40 160 C 20 160, 0 155, 0 120 Z"
+                fill="#1e341e"
+              />
+              <path
+                d="M 8 22 C 8 16, 12 16, 15 16 C 23 16, 27 29, 40 29 L 240 29 C 253 29, 257 16, 265 16 C 268 16, 272 16, 272 22 L 272 120 C 272 150, 255 152, 240 152 L 40 152 C 25 152, 8 152, 8 120 Z"
+                stroke="#3d5635"
+                strokeWidth="1.5"
+                strokeDasharray="6 4"
+              />
             </svg>
-            <svg
-              className="eye-icon eye-open"
-              style={{ opacity: 0 }}
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle cx="12" cy="12" r="3" />
-              <line x1="3" y1="3" x2="21" y2="21" />
-            </svg>
+            <div className="pocket-content">
+              <div style={{ position: 'relative', height: '24px', width: '100%' }}>
+                <div className="balance-stars">******</div>
+                <div className="balance-real">$12,450.00</div>
+              </div>
+              <div style={{ color: '#698263', fontSize: '12px', fontWeight: 500 }}>
+                Average Market Value
+              </div>
+              <div className="eye-icon-wrapper">
+                <svg
+                  className="eye-icon eye-slash"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                  <line x1="3" y1="3" x2="21" y2="21" />
+                </svg>
+                <svg
+                  className="eye-icon eye-open"
+                  style={{ opacity: 0 }}
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                  <line x1="3" y1="3" x2="21" y2="21" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</>
-
 
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <MagicRings
@@ -260,7 +290,6 @@ function App() {
         />
       </div>
     </>
-    
   )
 }
 

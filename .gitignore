@@ -4,7 +4,7 @@ __pycache__/
 *.pyc
 underlag/
 *.pkl
-football.db
+football1.db
 
 # OS
 .DS_Store
