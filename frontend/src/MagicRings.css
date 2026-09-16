@@ -1,0 +1,18 @@
+.magic-rings-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  /* Lägger ringarna bakom all din text och dina komponenter */
+  overflow: hidden;
+  pointer-events: none !important;
+  /* Gör så att du fortfarande kan klicka på knappar och inputs ovanpå */
+}
+
+.magic-rings-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}

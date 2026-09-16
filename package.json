@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "css-doodle": "^0.51.0",
+    "three": "^0.186.0"
+  }
+}

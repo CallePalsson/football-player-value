@@ -11,7 +11,7 @@ football.db
 Thumbs.db
 
 # Env
-.env
+*.env
 
 # Generated data/models
 models/
