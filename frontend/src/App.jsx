@@ -8,14 +8,36 @@ import './wallet.css'
 import './form.css'
 import './prediction.css'
 
+const LEAGUES = [
+  { code: "L1", name: "Bundesliga (Tyskland)" },
+  { code: "FR1", name: "Ligue 1 (Frankrike)" },
+  { code: "NL1", name: "Eredivisie (Nederländerna)" },
+  { code: "SC1", name: "Scottish Premiership (Skottland)" },
+  { code: "MLS1", name: "MLS (USA)" },
+  { code: "PL1", name: "Ekstraklasa (Polen)" },
+  { code: "KR1", name: "SuperSport HNL (Kroatien)" },
+  { code: "SER1", name: "SuperLiga (Serbien)" },
+  { code: "JAP1", name: "J1 League (Japan)" },
+  { code: "AUS1", name: "A-League (Australien)" },
+];
+const position = [
+  'Attack (ST/CF)',
+  'Midfielder (CM/CAM/CDM)',
+  'Defender (CB/LB/RB)',
+  'Goalkeeper (GK)'
+]
+
 function App() {
   const [count, setCount] = useState(0)
   const [isEvaluated, setIsEvaluted] = useState(false);
 
+  // 
   const handleGetValuation = (e) => {
     if (e) e.preventDefault();
     setIsEvaluted(true);
   };
+
+  // Gå tillbaka
   const handleReset = () => {
     setIsEvaluted(false);
   };
@@ -40,43 +62,184 @@ function App() {
       </span> */}
 
       {!isEvaluated ? (
-        <div className="login-box">
-          <p>Valuation</p>
-          <form onSubmit={handleGetValuation}>
-            <div className="user-box">
-              <input required="" name="goals" type="number" />
-              <label>Goals</label>
+        <>
+          <div className="login-box">
+            <p>Valuation</p>
+            <form onSubmit={handleGetValuation}>
+              <div className="user-box">
+                <input required="" name="goals" type="number" />
+                <label>Goals</label>
+              </div>
+              <div className="user-box">
+                <input required="" name="assists" type="number" />
+                <label>Assists</label>
+              </div>
+              {/* League */}
+              <div className="user-box">
+                <select required="" name="league" defaultValue="">
+                  <option value=""></option>
+                  <option value="L1">Bundesliga (Tyskland)</option>
+                  <option value="FR1">Ligue 1 (Frankrike)</option>
+                  <option value="NL1">Eredivisie (Nederländerna)</option>
+                  <option value="SC1">Scottish Premiership (Skottland)</option>
+                  <option value="MLS1">MLS (USA)</option>
+                  <option value="PL1">Ekstraklasa (Polen)</option>
+                  <option value="KR1">SuperSport HNL (Kroatien)</option>
+                  <option value="SER1">SuperLiga (Serbien)</option>
+                  <option value="JAP1">J1 League (Japan)</option>
+                  <option value="AUS1">A-League (Australien)</option>
+                </select>
+                <label>League</label>
+              </div>
+
+              {/* Position */}
+              <div className="user-box">
+                <select required="" name="position" defaultValue="">
+                  <option value=""></option>
+                  <option value="Attack">Attack</option>
+                  <option value="Midfield">Midfield</option>
+                  <option value="Defender">Defender</option>
+                  <option value="Goalkeeper">Goalkeeper</option>
+                </select>
+                <label>Position</label>
+              </div>
+              <div className="user-box">
+                <input required="" name="games" type="number" />
+                <label>Games</label>
+              </div>
+              <div className="user-box">
+                <input required="" name="age" type="number" />
+                <label>Age</label>
+              </div>
+              <a href="#" onClick={handleGetValuation}>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Get Valuation
+              </a>
+            </form>
+            <p>See other <a href="#" className="a2">Valuations</a></p>
+          </div>
+
+          <div className="app-container">
+            <div className="wallet">
+              <div className="wallet-back"></div>
+
+              <div className="card stripe">
+                <div className="card-inner">
+                  <div className="card-top">
+                    <span>Osby BK</span>
+                    <div className="chip"></div>
+                  </div>
+                  <div className="card-bottom">
+                    <div className="card-info">
+                      <span className="label">Player Name</span>
+                      <span className="value">Calle Pålsson</span>
+                    </div>
+                    <div className="card-number-wrapper">
+                      <span className="hidden-stars">**** 4242</span>
+                      <span className="card-number">$500 000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card wise">
+                <div className="card-inner">
+                  <div className="card-top">
+                    <span>Barcelona</span>
+                    <div className="chip"></div>
+                  </div>
+                  <div className="card-bottom">
+                    <div className="card-info">
+                      <span className="label">Player Name</span>
+                      <span className="value">Lamine Yamal</span>
+                    </div>
+                    <div className="card-number-wrapper">
+                      <span className="hidden-stars">**** 8810</span>
+                      <span className="card-number">$200 000 000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card paypal">
+                <div className="card-inner">
+                  <div className="card-top">
+                    <span>Paris Saint<b style={{ color: '#0079C1' }}> Germain</b></span>
+                    <div className="chip"></div>
+                  </div>
+                  <div className="card-bottom">
+                    <div className="card-info">
+                      <span className="label">Player Name</span>
+                      <span className="value">Kylian Mbappe</span>
+                    </div>
+                    <div className="card-number-wrapper">
+                      <span className="hidden-stars">**** 0094</span>
+                      <span className="card-number">$120 000 000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pocket">
+                <svg className="pocket-svg" viewBox="0 0 280 160" fill="none">
+                  <path
+                    d="M 0 20 C 0 10, 5 10, 10 10 C 20 10, 25 25, 40 25 L 240 25 C 255 25, 260 10, 270 10 C 275 10, 280 10, 280 20 L 280 120 C 280 155, 260 160, 240 160 L 40 160 C 20 160, 0 155, 0 120 Z"
+                    fill="#1e341e"
+                  />
+                  <path
+                    d="M 8 22 C 8 16, 12 16, 15 16 C 23 16, 27 29, 40 29 L 240 29 C 253 29, 257 16, 265 16 C 268 16, 272 16, 272 22 L 272 120 C 272 150, 255 152, 240 152 L 40 152 C 25 152, 8 152, 8 120 Z"
+                    stroke="#3d5635"
+                    strokeWidth="1.5"
+                    strokeDasharray="6 4"
+                  />
+                </svg>
+                <div className="pocket-content">
+                  <div style={{ position: 'relative', height: '24px', width: '100%' }}>
+                    <div className="balance-stars">******</div>
+                    <div className="balance-real">$12,450.00</div>
+                  </div>
+                  <div style={{ color: '#698263', fontSize: '12px', fontWeight: 500 }}>
+                    Average Market Value
+                  </div>
+                  <div className="eye-icon-wrapper">
+                    <svg
+                      className="eye-icon eye-slash"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                      <line x1="3" y1="3" x2="21" y2="21" />
+                    </svg>
+                    <svg
+                      className="eye-icon eye-open"
+                      style={{ opacity: 0 }}
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                      <line x1="3" y1="3" x2="21" y2="21" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="user-box">
-              <input required="" name="assists" type="number" />
-              <label>Assists</label>
-            </div>
-            <div className="user-box">
-              <input required="" name="league" type="text" />
-              <label>League</label>
-            </div>
-            <div className="user-box">
-              <input required="" name="position" type="text" />
-              <label>Position</label>
-            </div>
-            <div className="user-box">
-              <input required="" name="games" type="number" />
-              <label>Games</label>
-            </div>
-            <div className="user-box">
-              <input required="" name="age" type="number" />
-              <label>Age</label>
-            </div>
-            <a href="#" onClick={handleGetValuation}>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              Get Valuation
-            </a>
-          </form>
-          <p>See other <a href="#" className="a2">Valuations</a></p>
-        </div>
+          </div>
+        </>
       ) : (
         <div className="price-card">
           <div className="price-card-glow"></div>
@@ -144,125 +307,10 @@ function App() {
             </div>
           </div>
         </div>
+
       )}
 
-      <div className="app-container"> 
-        <div className="wallet">
-          <div className="wallet-back"></div>
 
-          <div className="card stripe">
-            <div className="card-inner">
-              <div className="card-top">
-                <span>Osby BK</span>
-                <div className="chip"></div>
-              </div>
-              <div className="card-bottom">
-                <div className="card-info">
-                  <span className="label">Player Name</span>
-                  <span className="value">Calle Pålsson</span>
-                </div>
-                <div className="card-number-wrapper">
-                  <span className="hidden-stars">**** 4242</span>
-                  <span className="card-number">$500 000</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card wise">
-            <div className="card-inner">
-              <div className="card-top">
-                <span>Barcelona</span>
-                <div className="chip"></div>
-              </div>
-              <div className="card-bottom">
-                <div className="card-info">
-                  <span className="label">Player Name</span>
-                  <span className="value">Lamine Yamal</span>
-                </div>
-                <div className="card-number-wrapper">
-                  <span className="hidden-stars">**** 8810</span>
-                  <span className="card-number">$200 000 000</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card paypal">
-            <div className="card-inner">
-              <div className="card-top">
-                <span>Paris Saint<b style={{ color: '#0079C1' }}> Germain</b></span>
-                <div className="chip"></div>
-              </div>
-              <div className="card-bottom">
-                <div className="card-info">
-                  <span className="label">Player Name</span>
-                  <span className="value">Kylian Mbappe</span>
-                </div>
-                <div className="card-number-wrapper">
-                  <span className="hidden-stars">**** 0094</span>
-                  <span className="card-number">$120 000 000</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="pocket">
-            <svg className="pocket-svg" viewBox="0 0 280 160" fill="none">
-              <path
-                d="M 0 20 C 0 10, 5 10, 10 10 C 20 10, 25 25, 40 25 L 240 25 C 255 25, 260 10, 270 10 C 275 10, 280 10, 280 20 L 280 120 C 280 155, 260 160, 240 160 L 40 160 C 20 160, 0 155, 0 120 Z"
-                fill="#1e341e"
-              />
-              <path
-                d="M 8 22 C 8 16, 12 16, 15 16 C 23 16, 27 29, 40 29 L 240 29 C 253 29, 257 16, 265 16 C 268 16, 272 16, 272 22 L 272 120 C 272 150, 255 152, 240 152 L 40 152 C 25 152, 8 152, 8 120 Z"
-                stroke="#3d5635"
-                strokeWidth="1.5"
-                strokeDasharray="6 4"
-              />
-            </svg>
-            <div className="pocket-content">
-              <div style={{ position: 'relative', height: '24px', width: '100%' }}>
-                <div className="balance-stars">******</div>
-                <div className="balance-real">$12,450.00</div>
-              </div>
-              <div style={{ color: '#698263', fontSize: '12px', fontWeight: 500 }}>
-                Average Market Value
-              </div>
-              <div className="eye-icon-wrapper">
-                <svg
-                  className="eye-icon eye-slash"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                  <line x1="3" y1="3" x2="21" y2="21" />
-                </svg>
-                <svg
-                  className="eye-icon eye-open"
-                  style={{ opacity: 0 }}
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                  <line x1="3" y1="3" x2="21" y2="21" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <MagicRings

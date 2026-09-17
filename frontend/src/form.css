@@ -23,7 +23,7 @@
   font-weight: bold;
   letter-spacing: 1px;
   font-family: 'Josefin Sans', sans-serif;
-  
+
 }
 
 .login-box .user-box {
@@ -55,6 +55,58 @@
 
 .login-box .user-box input:focus~label,
 .login-box .user-box input:valid~label {
+  top: -20px;
+  left: 0;
+  color: #fff;
+  font-size: 12px;
+}
+
+.login-box .user-box select {
+  width: 100%;
+  padding: 10px 24px 0px 0;
+  font-size: 11px;
+  font-family: inherit;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a1a1aa'%3E%3Cpath d='M12 4l-5 6h10l-5-6zm0 16l5-6H7l5 6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 12px 12px;
+}
+
+/* Döljer texten när inget är valt så label syns rent och prydligt på linjen */
+.login-box .user-box select:invalid {
+  color: transparent;
+}
+
+.login-box .user-box select option {
+  background: rgba(32, 41, 28, 0.98);
+  color: #fff;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.login-box .user-box select option:checked {
+  color: #b5e338;
+}
+
+.login-box .user-box select option[value=""] {
+  color: #a1a1aa;
+}
+
+/* Samma flytande label-animation som för input */
+.login-box .user-box select:focus~label,
+.login-box .user-box select:valid~label {
   top: -20px;
   left: 0;
   color: #fff;
@@ -107,7 +159,9 @@
   }
 }
 
-.root{outline: solid 3px red;}
+.root {
+  outline: solid 3px red;
+}
 
 
 .login-box a span:nth-child(2) {
