@@ -2,20 +2,59 @@
 from pydantic import BaseModel
 import joblib 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import numpy as np
 import pandas as pd
+import os
+
+# Läs in kolumnnamnen som modellen tränades på så dummies matchar
+# (Tips: spara X_train.columns med joblib från notebooken, eller hårdkoda listan)
+
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+# Letar efter .env i samma mapp som main.py, samt en mapp upp (projektets rot)
+env_path = Path(__file__).resolve().parent / ".env"
+if not env_path.exists():
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+
+load_dotenv(dotenv_path=env_path)
+
+mongo_uri = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
+
+if not mongo_uri:
+    raise ValueError(f"Hittade ingen MongoDB URI! Kollade sökvägen: {env_path}")
+    
+client = MongoClient(mongo_uri) # Ändra connection string om ni kör molnet/Atlas
+db = client["football_data"]
+predictions_collection = db["player_data"]
 
 app = FastAPI()
 
-model = joblib.load("rfr_tuned.pkl")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],           # Tillåter anrop från Dev Tunnels och alla andra adresser
+    allow_credentials=True,
+    allow_methods=["*"],           # Tillåter POST, GET, OPTIONS etc.
+    allow_headers=["*"],           # Tillåter alla headers (Content-Type osv.)
+)
+
+# model = joblib.load("rfr_tuned.pkl")
+
+try:
+    model = joblib.load("rfr_tuned.pkl")
+    model_columns = model.feature_names_in_
+except Exception as e:
+    raise ValueError(f"Kunde inte ladda modell: {e}")
 
 class PlayerInput(BaseModel):
     player_name: str
     age: int
     goals: int
     assists: int
-    games: int
+    minutes_played: int
     league: str
     position: str
 
@@ -30,21 +69,22 @@ def health():
 @app.get("/api/model")
 def model_status():
     return {
-        "loaded": model is not None
+        "loaded": model_columns is not None
     }
 
-@app.post("/predict")
+@app.post("/api/predict")
 def predict_and_store(player: PlayerInput):
     # Skapa DataFrame för modellen
+    if model_columns is None:
+        print("ingen modell laddad")
     input_df = pd.DataFrame(0, index=[0], columns=model_columns) if model_columns is not None else pd.DataFrame()
 
-    minutes = player.games * 90
 
     if not input_df.empty:
         input_df['age'] = player.age
         input_df['goals'] = player.goals
         input_df['assists'] = player.assists
-        input_df['minutes_played'] = minutes
+        input_df['minutes_played'] = player.minutes_played
 
         # Sätt 1:or på position och liga
         for col in input_df.columns:
@@ -66,8 +106,7 @@ def predict_and_store(player: PlayerInput):
         "age": player.age,
         "goals": player.goals,
         "assists": player.assists,
-        "games": player.games,
-        "minutes_played": minutes,
+        "minutes_played": player.minutes_played,
         "league": player.league,
         "position": player.position,
         "predicted_value": predicted_value
@@ -123,17 +162,8 @@ import pandas as pd
 app = FastAPI(title="Football Valuation API")
 
 # 1. Koppla upp mot MongoDB
-client = MongoClient("mongodb://localhost:27017/")  # Ändra connection string om ni kör molnet/Atlas
-db = client["football_db"]
-predictions_collection = db["predictions"]
 
 
-# Läs in kolumnnamnen som modellen tränades på så dummies matchar
-# (Tips: spara X_train.columns med joblib från notebooken, eller hårdkoda listan)
-try:
-    model_columns = joblib.load("model_columns.pkl")
-except:
-    model_columns = None
 
 
 # 3. Pydantic-schema för POST från Frontenden

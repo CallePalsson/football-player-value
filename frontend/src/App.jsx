@@ -8,36 +8,68 @@ import './wallet.css'
 import './form.css'
 import './prediction.css'
 
+
 const LEAGUES = [
+  { code: 'GB1', name: 'Premier Leauge' },
+  { code: 'IT1', name: 'Serie A' },
   { code: "L1", name: "Bundesliga (Tyskland)" },
   { code: "FR1", name: "Ligue 1 (Frankrike)" },
   { code: "NL1", name: "Eredivisie (Nederländerna)" },
   { code: "SC1", name: "Scottish Premiership (Skottland)" },
   { code: "MLS1", name: "MLS (USA)" },
-  { code: "PL1", name: "Ekstraklasa (Polen)" },
-  { code: "KR1", name: "SuperSport HNL (Kroatien)" },
-  { code: "SER1", name: "SuperLiga (Serbien)" },
-  { code: "JAP1", name: "J1 League (Japan)" },
-  { code: "AUS1", name: "A-League (Australien)" },
+  { code: "PL1", name: "Ekstraklasa (Polen)" }
 ];
+
 const position = [
   'Attack (ST/CF)',
   'Midfielder (CM/CAM/CDM)',
   'Defender (CB/LB/RB)',
   'Goalkeeper (GK)'
-]
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const [isEvaluated, setIsEvaluted] = useState(false);
+  const [predictedValue, setPredictedValue] = useState(null);
 
-  // 
-  const handleGetValuation = (e) => {
+  const handleGetValuation = async (e) => {
     if (e) e.preventDefault();
-    setIsEvaluted(true);
+
+    const form = e.currentTarget.tagName === 'FORM' ? e.currentTarget : e.currentTarget.closest('form');
+    const formData = new FormData(form);
+
+    const playerData = {
+      player_name: "Calle Pålsson",
+      goals: Number(formData.get("goals")),
+      assists: Number(formData.get("assists")),
+      league: formData.get("league"),
+      position: formData.get("position"),
+      minutes_played: Number(formData.get("minutes_played")),
+      age: Number(formData.get("age")),
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/api/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(playerData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Kunde inte hämta värdering");
+      }
+
+      const data = await response.json();
+      console.log("Predicted value:", data.predicted_value);
+      setPredictedValue(data.predicted_value);
+      setIsEvaluted(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Gå tillbaka
   const handleReset = () => {
     setIsEvaluted(false);
   };
@@ -52,15 +84,6 @@ function App() {
         <span>Football</span> Valuation
       </h1>
 
-      {/* <span className='input'>
-        <input type="text" name="text" className="input" placeholder="Age"></input>
-        <input type="text" name="text" className="input" placeholder="Position"></input>
-        <input type="text" name="text" className="input" placeholder="Goals"></input>
-        <input type="text" name="text" className="input" placeholder="Assists"></input>
-        <input type="text" name="text" className="input" placeholder="League"></input>
-        <button>Submit</button>
-      </span> */}
-
       {!isEvaluated ? (
         <>
           <div className="login-box">
@@ -74,25 +97,23 @@ function App() {
                 <input required="" name="assists" type="number" />
                 <label>Assists</label>
               </div>
-              {/* League */}
+
               <div className="user-box">
                 <select required="" name="league" defaultValue="">
                   <option value=""></option>
+                  <option value="GB1">Premier Leauge (England)</option>
+                  <option value="IT1">Serie A (Italien)</option>
                   <option value="L1">Bundesliga (Tyskland)</option>
                   <option value="FR1">Ligue 1 (Frankrike)</option>
                   <option value="NL1">Eredivisie (Nederländerna)</option>
                   <option value="SC1">Scottish Premiership (Skottland)</option>
                   <option value="MLS1">MLS (USA)</option>
                   <option value="PL1">Ekstraklasa (Polen)</option>
-                  <option value="KR1">SuperSport HNL (Kroatien)</option>
                   <option value="SER1">SuperLiga (Serbien)</option>
-                  <option value="JAP1">J1 League (Japan)</option>
-                  <option value="AUS1">A-League (Australien)</option>
                 </select>
                 <label>League</label>
               </div>
 
-              {/* Position */}
               <div className="user-box">
                 <select required="" name="position" defaultValue="">
                   <option value=""></option>
@@ -104,14 +125,14 @@ function App() {
                 <label>Position</label>
               </div>
               <div className="user-box">
-                <input required="" name="games" type="number" />
+                <input required="" name="minutes_played" type="number" />
                 <label>Games</label>
               </div>
               <div className="user-box">
                 <input required="" name="age" type="number" />
                 <label>Age</label>
               </div>
-              <a href="#" onClick={handleGetValuation}>
+              <a href="#" onClick={(e) => { e.preventDefault(); e.currentTarget.closest('form').requestSubmit(); }}>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -215,7 +236,7 @@ function App() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z" />
                       <circle cx="12" cy="12" r="3" />
                       <line x1="3" y1="3" x2="21" y2="21" />
                     </svg>
@@ -275,7 +296,11 @@ function App() {
 
             <div className="price-card-worth">
               <p className="price-card-label">Estimated Worth</p>
-              <p className="price-card-val">$120,818</p>
+              <p className="price-card-val">
+                {predictedValue !== null
+                  ? `€${Math.round(predictedValue).toLocaleString()}`
+                  : "$120,818"}
+              </p>
             </div>
 
             <div className="price-card-graph">
@@ -307,10 +332,7 @@ function App() {
             </div>
           </div>
         </div>
-
       )}
-
-
 
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <MagicRings
@@ -338,7 +360,7 @@ function App() {
         />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
