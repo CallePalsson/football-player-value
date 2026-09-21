@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import joblib 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime, timezone
 from pymongo import MongoClient
 import numpy as np
 import pandas as pd
@@ -72,6 +73,18 @@ def model_status():
         "loaded": model_columns is not None
     }
 
+@app.get("/api/predictions")
+def get_predictions():
+    predictions = list(
+        predictions_collection.find(
+            {"valuation": True},
+            {"_id": 0}
+        ).sort("created_at", -1)
+    )
+
+    return predictions
+
+
 @app.post("/api/predict")
 def predict_and_store(player: PlayerInput):
     # Skapa DataFrame för modellen
@@ -101,6 +114,8 @@ def predict_and_store(player: PlayerInput):
         predicted_value = 15000000.0
 
     # Skapa dokumentet som ska sparas i MongoDB
+
+
     player_doc = {
         "player_name": player.player_name,
         "age": player.age,
@@ -109,15 +124,15 @@ def predict_and_store(player: PlayerInput):
         "minutes_played": player.minutes_played,
         "league": player.league,
         "position": player.position,
-        "predicted_value": predicted_value
+        "predicted_value": predicted_value,
+        "valuation": True,
+        "prediction": True,
+        "created_at": datetime.now(timezone.utc)
     }
 
+
     # Spara eller uppdatera i MongoDB
-    predictions_collection.update_one(
-        {"player_name": player.player_name},
-        {"$set": player_doc},
-        upsert=True
-    )
+    predictions_collection.insert_one(player_doc)
 
     return {
         "message": "Prediktion sparad i MongoDB",

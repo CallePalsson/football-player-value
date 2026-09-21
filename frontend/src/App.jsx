@@ -7,6 +7,7 @@ import './App.css'
 import './wallet.css'
 import './form.css'
 import './prediction.css'
+import './ticket.css'
 
 
 const LEAGUES = [
@@ -31,6 +32,10 @@ function App() {
   const [count, setCount] = useState(0);
   const [isEvaluated, setIsEvaluted] = useState(false);
   const [predictedValue, setPredictedValue] = useState(null);
+  const [showOtherValuations, setShowOtherValuations] = useState(false);
+  const [predictions, setPredictions] = useState([]);
+  const [loadingPredictions, setLoadingPredictions] = useState(false);
+  const [predictionError, setPredictionError] = useState('');
 
   const handleGetValuation = async (e) => {
     if (e) e.preventDefault();
@@ -39,7 +44,7 @@ function App() {
     const formData = new FormData(form);
 
     const playerData = {
-      player_name: "Calle Pålsson",
+      player_name: formData.get("player_name").trim(),
       goals: Number(formData.get("goals")),
       assists: Number(formData.get("assists")),
       league: formData.get("league"),
@@ -69,6 +74,30 @@ function App() {
       console.error(error);
     }
   };
+  const handleShowValuations = async (e) => {
+    e.preventDefault();
+
+    setLoadingPredictions(true);
+    setPredictionError('');
+    setShowOtherValuations(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/predictions");
+
+      if (!response.ok) {
+        throw new Error("Kunde inte hämta tidigare valuations");
+      }
+
+      const data = await response.json();
+      setPredictions(Array.isArray(data) ? data : []);
+
+    } catch (error) {
+      console.error(error);
+      setPredictionError("Kunde inte hämta spelarvärderingar.");
+    } finally {
+      setLoadingPredictions(false);
+    }
+  };
 
   const handleReset = () => {
     setIsEvaluted(false);
@@ -76,19 +105,83 @@ function App() {
 
   return (
     <>
-      <span className="badge">AI PLAYER VALUATION ENGINE</span>
+      <span className="badge">ML PLAYER VALUATION ENGINE</span>
       <h1
         className="sliced-title"
         style={{ '--text': "'FOOTBALL VALUATION'" }}
       >
         <span>Football</span> Valuation
       </h1>
+      {showOtherValuations ? (
+        <div className="ticket-page">
 
-      {!isEvaluated ? (
+          <button
+            className="ticket-back"
+            onClick={() => setShowOtherValuations(false)}
+          >
+            ← Back
+          </button>
+
+          {loadingPredictions ? (
+            <p className="ticket-status">Hämtar spelarvärderingar...</p>
+          ) : predictionError ? (
+            <p className="ticket-status">{predictionError}</p>
+          ) : predictions.length === 0 ? (
+            <p className="ticket-status">Inga sparade spelarvärderingar hittades.</p>
+          ) : (
+            predictions.map((player, index) => (
+              <div className="player-card" key={`${player.player_name}-${index}`}>
+                <div className="player-card__glow" />
+                <div className="player-card__rarity">PLAYER VALUATION</div>
+
+                <div className="player-card__header">
+                  <span className="player-card__eyebrow">AI SCOUT REPORT</span>
+                  <span className="player-card__index">#{String(index + 1).padStart(2, '0')}</span>
+                </div>
+
+                <div className="player-card__art">
+                  <span className="player-card__initials">
+                    {(player.player_name || '??').split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase()}
+                  </span>
+                  <span className="player-card__position">{player.position || 'Unknown position'}</span>
+                </div>
+
+                <div className="player-card__name-block">
+                  <h2>{player.player_name || 'Unknown player'}</h2>
+                  <p>{player.league || 'Unknown league'}</p>
+                </div>
+
+                <section className="player-card__stats">
+                  <div><span>AGE</span><strong>{player.age ?? '-'}</strong></div>
+                  <div><span>GOALS</span><strong>{player.goals ?? 0}</strong></div>
+                  <div><span>ASSISTS</span><strong>{player.assists ?? 0}</strong></div>
+                </section>
+
+                <section className="player-card__details">
+                  <div><span>POSITION</span><strong>{player.position || '-'}</strong></div>
+                  <div><span>MINUTES PLAYED</span><strong>{player.minutes_played ?? 0}</strong></div>
+                </section>
+
+                <div className="player-card__value">
+                  <span>ESTIMATED MARKET VALUE</span>
+                  <strong>€{Number(player.predicted_value || 0).toLocaleString('sv-SE')}</strong>
+                </div>
+
+                <div className="player-card__footer">VALUATION: VERIFIED DATA</div>
+              </div>
+            ))
+          )}
+        </div>
+      ) : !isEvaluated ? (
+
         <>
           <div className="login-box">
             <p>Valuation</p>
             <form onSubmit={handleGetValuation}>
+              <div className="user-box">
+                <input required name="player_name" type="text" />
+                <label>Player name</label>
+              </div>
               <div className="user-box">
                 <input required="" name="goals" type="number" />
                 <label>Goals</label>
@@ -126,7 +219,7 @@ function App() {
               </div>
               <div className="user-box">
                 <input required="" name="minutes_played" type="number" />
-                <label>Games</label>
+                <label>Minutes played</label>
               </div>
               <div className="user-box">
                 <input required="" name="age" type="number" />
@@ -140,7 +233,18 @@ function App() {
                 Get Valuation
               </a>
             </form>
-            <p>See other <a href="#" className="a2">Valuations</a></p>
+            <p>
+              See other{" "}
+              <a
+                href="#"
+                className="a2"
+                onClick={(e) => {
+                  handleShowValuations(e);
+                }}
+              >
+                Valuations
+              </a>
+            </p>
           </div>
 
           <div className="app-container">
@@ -327,7 +431,7 @@ function App() {
 
             <div className="price-card-footer">
               <button className="price-card-btn" onClick={handleReset}>
-                View Full Report
+                New Valuation
               </button>
             </div>
           </div>

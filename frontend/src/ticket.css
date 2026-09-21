@@ -1,0 +1,1053 @@
+.ticket-card {
+    --width: 220px;
+    --height: 390px;
+    --perforation-size: 14px;
+    --cutouts-adjust: 85px;
+
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header"
+        "body"
+        "footer";
+
+    width: var(--width);
+    height: var(--height);
+
+    padding: var(--perforation-size) 0;
+
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+
+    user-select: none;
+    overflow: visible;
+
+    filter:
+        drop-shadow(0 2px 1px rgba(0, 0, 0, 0.15)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.15)) drop-shadow(0 10px 9px rgba(0, 0, 0, 0.15)) drop-shadow(0 20px 20px rgba(0, 0, 0, 0.15)) drop-shadow(0 40px 40px rgba(0, 0, 0, 0.15));
+
+    animation: ticket-hover 3s ease-in-out infinite;
+
+    will-change: transform, filter;
+
+    isolation: isolate;
+}
+
+
+/* =========================
+   HOVER / FLOAT ANIMATION
+========================= */
+
+@keyframes ticket-hover {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-1deg) scale(1);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(1deg) scale(1.025);
+
+        filter:
+            drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1)) drop-shadow(0 6px 6px rgba(0, 0, 0, 0.1)) drop-shadow(0 16px 14px rgba(0, 0, 0, 0.1)) drop-shadow(0 30px 28px rgba(0, 0, 0, 0.1)) drop-shadow(0 60px 60px rgba(0, 0, 0, 0.1));
+    }
+}
+
+
+/* =========================
+   SVG FILTER
+========================= */
+
+.ticket-filter {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+
+/* =========================
+   BACKGROUND SHAPE
+========================= */
+
+.ticket-bg {
+    position: absolute;
+    inset: 0;
+
+    border-radius: 5px;
+
+    background-color: #fff;
+
+    filter: url("#bump");
+
+    z-index: -1;
+
+    mask:
+        radial-gradient(circle at 50% 0,
+            transparent calc(var(--perforation-size) - 5px),
+            #000 calc(var(--perforation-size) - 4px)),
+
+        radial-gradient(circle at 50% 100%,
+            transparent calc(var(--perforation-size) - 5px),
+            #000 calc(var(--perforation-size) - 4px)),
+
+        radial-gradient(circle 9px at left center,
+            #000 98%,
+            transparent 100%),
+
+        radial-gradient(circle 9px at right center,
+            #000 98%,
+            transparent 100%),
+
+        repeating-linear-gradient(90deg,
+            #000 0px,
+            #000 10px,
+            transparent 11px,
+            transparent 18px);
+
+    mask-repeat:
+        repeat-x,
+        repeat-x,
+        no-repeat,
+        no-repeat,
+        repeat-x;
+
+    mask-size:
+        calc(var(--perforation-size) * 2) 100%,
+        calc(var(--perforation-size) * 2) 100%,
+        18px 18px,
+        18px 18px,
+        18px 2px;
+
+    mask-position:
+        calc(0.5 * var(--perforation-size)) top,
+        calc(0.5 * var(--perforation-size)) bottom,
+        left var(--cutouts-adjust),
+        right var(--cutouts-adjust),
+        0 calc(var(--cutouts-adjust) + 8px);
+
+    mask-composite: intersect, exclude, add, add;
+}
+
+
+/* =========================
+   HOLOGRAPHIC BASE
+========================= */
+
+.ticket-holographic {
+    background-image:
+
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.45),
+            transparent 22%,
+            rgba(255, 255, 255, 0.14) 42%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.35)),
+
+        linear-gradient(to bottom,
+            rgba(255, 238, 85, 0.55),
+            90%,
+            rgba(0, 0, 0, 0.13)),
+
+        conic-gradient(from 50deg at 60% 50%,
+            #d8d8d8,
+            #ff6bfe,
+            #00f9f8,
+            #dddddd,
+            #0081fd,
+            #eef0bc,
+            #a3ff12,
+            #0081fd,
+            #ff6bfe,
+            #ffce3a,
+            #0081fd,
+            #dddddd,
+            #01fefb,
+            #cccccc);
+
+    background-size:
+        200% 200%,
+        100% 100%,
+        250% 250%;
+
+    animation:
+        ticket-holo-move 7s ease-in-out infinite alternate,
+        ticket-holo-shift 10s linear infinite;
+}
+
+
+@keyframes ticket-holo-move {
+    from {
+        background-position:
+            0% 0%,
+            0 0,
+            20% 30%;
+    }
+
+    to {
+        background-position:
+            100% 100%,
+            0 0,
+            80% 70%;
+    }
+}
+
+
+@keyframes ticket-holo-shift {
+    0% {
+        filter:
+            url("#bump") hue-rotate(0deg) saturate(1.1);
+    }
+
+    50% {
+        filter:
+            url("#bump") hue-rotate(40deg) saturate(1.5);
+    }
+
+    100% {
+        filter:
+            url("#bump") hue-rotate(0deg) saturate(1.1);
+    }
+}
+
+
+/* =========================
+   HOLOGRAPHIC LIGHT
+========================= */
+
+.ticket-holographic::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+
+    background:
+        radial-gradient(circle at 70% 20%,
+            rgba(255, 0, 255, 0.85),
+            transparent 30%),
+
+        radial-gradient(circle at 20% 60%,
+            rgba(0, 255, 255, 0.75),
+            transparent 35%),
+
+        radial-gradient(circle at 75% 75%,
+            rgba(194, 255, 50, 0.7),
+            transparent 30%),
+
+        repeating-radial-gradient(circle at 30% 80%,
+            rgba(255, 255, 255, 0.8),
+            rgba(244, 68, 170, 0.6) 48px,
+            rgba(238, 238, 238, 0.75) 150px);
+
+    mix-blend-mode: color-burn;
+
+    opacity: 0.7;
+
+    animation: ticket-light-spin 8s linear infinite alternate;
+}
+
+
+@keyframes ticket-light-spin {
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+
+    to {
+        transform: scale(1.15) rotate(6deg);
+    }
+}
+
+
+/* =========================
+   DIFFERENCE OVERLAY
+========================= */
+
+.ticket-holographic::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(to bottom,
+            rgba(255, 34, 0, 0.35),
+            rgba(255, 0, 0, 0.45),
+            rgba(0, 255, 0, 0.4),
+            rgba(0, 230, 255, 0.45),
+            rgba(255, 0, 255, 0.35));
+
+    mix-blend-mode: difference;
+
+    animation: ticket-bg-pos 3s ease-in-out infinite alternate;
+
+    background-position: 0 0;
+    background-size: 100% 300%;
+}
+
+
+@keyframes ticket-bg-pos {
+    to {
+        background-position: 0 500px;
+    }
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.ticket-header {
+    position: relative;
+
+    grid-area: header;
+
+    margin: 6px 12px 0;
+
+    text-align: center;
+
+    z-index: 5;
+
+    font-family: Impact, "Arial Black", sans-serif;
+
+    font-size: 2.7rem;
+
+    font-weight: 900;
+
+    letter-spacing: 4px;
+
+    line-height: 1;
+
+    color: rgba(255, 255, 255, 0.62);
+
+    text-shadow:
+        1px 1px 0 rgba(0, 0, 0, 0.45),
+        -1px -1px 0 rgba(255, 255, 255, 0.18);
+
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.8);
+
+    mix-blend-mode: difference;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.ticket-body {
+    grid-area: body;
+
+    position: relative;
+
+    margin: 0 1em;
+
+    padding: 1.1em 0.7em;
+
+    z-index: 5;
+
+    color: rgba(15, 15, 15, 0.82);
+
+    font-size: 0.95rem;
+
+    font-weight: 500;
+
+    line-height: 1.7;
+
+    letter-spacing: 0.2px;
+
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+
+.ticket-body em {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    font-size: 0.68rem;
+
+    font-style: normal;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    padding: 4px 9px;
+
+    border: 1px solid rgba(0, 0, 0, 0.25);
+
+    border-radius: 100px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(5px);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.ticket-footer {
+    grid-area: footer;
+
+    position: relative;
+
+    z-index: 5;
+
+    margin: 0 1em 1.2em;
+}
+
+
+/* =========================
+   VALUE
+========================= */
+
+.ticket-number {
+    margin-bottom: 1rem;
+
+    padding: 8px 12px;
+
+    text-align: center;
+
+    border-radius: 999px 0 999px 0;
+
+    background: rgba(255, 255, 255, 0.18);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.25);
+
+    backdrop-filter: blur(8px);
+
+    color: #080808;
+
+    font-size: 0.78rem;
+
+    font-weight: 400;
+
+    letter-spacing: 0.4px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+.ticket-bold {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 1.15rem;
+
+    font-weight: 900;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* =========================
+   BARCODE
+========================= */
+
+.ticket-barcode {
+    position: relative;
+
+    margin: 0 auto;
+
+    width: 1px;
+
+    height: 38px;
+
+    background: #000;
+
+    box-shadow:
+        3px 0 0 1px #000,
+        6px 0 0 0 #000,
+        9px 0 0 1px #000,
+        13px 0 0 0 #000,
+        16px 0 0 1px #000,
+        21px 0 0 1px #000,
+        25px 0 0 0 #000,
+        28px 0 0 1px #000,
+        33px 0 0 1px #000,
+        37px 0 0 0 #000,
+        40px 0 0 1px #000,
+        45px 0 0 0 #000,
+        49px 0 0 1px #000,
+        54px 0 0 1px #000,
+        57px 0 0 0 #000,
+        61px 0 0 1px #000,
+        66px 0 0 1px #000,
+        69px 0 0 0 #000,
+        73px 0 0 1px #000,
+        78px 0 0 0 #000,
+        82px 0 0 1px #000,
+        86px 0 0 1px #000,
+        91px 0 0 0 #000,
+        95px 0 0 1px #000,
+        100px 0 0 1px #000;
+
+    transform: translateX(-50px);
+
+    opacity: 0.85;
+}
+
+
+/* barcode number */
+
+.ticket-barcode::after {
+    content: "0938 2157 4821";
+
+    position: absolute;
+
+    top: 42px;
+    left: 0;
+
+    width: 110px;
+
+    transform: translateX(-5px);
+
+    font-family: monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 1.4px;
+
+    white-space: nowrap;
+
+    color: rgba(0, 0, 0, 0.75);
+}
+
+
+/* =========================
+   SCISSORS
+========================= */
+
+.ticket-symbol {
+    position: absolute;
+
+    top: 1.25em;
+    right: -5px;
+
+    transform: rotate(185deg);
+
+    font-size: 1.05em;
+
+    color: #fff;
+
+    line-height: 0.5;
+
+    opacity: 0.28;
+}
+
+
+/* =========================
+   MUSIC NOTES
+========================= */
+
+.ticket-notes {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    font-size: 5rem;
+
+    font-weight: 900;
+
+    letter-spacing: -8px;
+
+    white-space: nowrap;
+
+    color: #e7e7e7;
+
+    mix-blend-mode: color-burn;
+
+    opacity: 0.35;
+
+    transform:
+        translate(-15px, 20%) rotate(-8deg);
+
+    z-index: 2;
+}
+
+
+.ticket-notes:nth-child(2) {
+    transform:
+        translate(-35px, 42%) rotate(7deg);
+
+    opacity: 0.25;
+}
+
+
+.ticket-notes:nth-child(3) {
+    transform:
+        translate(-10px, 68%) rotate(-5deg);
+
+    opacity: 0.3;
+}
+
+
+/* =========================
+   SHINE SWEEP
+========================= */
+
+.ticket-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -50%;
+    left: -150%;
+
+    width: 100%;
+    height: 200%;
+
+    background:
+        linear-gradient(110deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.05) 42%,
+            rgba(255, 255, 255, 0.65) 50%,
+            rgba(255, 255, 255, 0.08) 58%,
+            transparent 65%);
+
+    transform: rotate(15deg);
+
+    z-index: 10;
+
+    pointer-events: none;
+
+    mix-blend-mode: screen;
+
+    animation: ticket-shine 5s ease-in-out infinite;
+}
+
+
+@keyframes ticket-shine {
+
+    0%,
+    35% {
+        left: -160%;
+    }
+
+    70%,
+    100% {
+        left: 170%;
+    }
+}
+
+
+/* =========================
+   FINE GRAIN
+========================= */
+
+.ticket-card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.08;
+
+    z-index: 8;
+
+    background-image:
+        repeating-radial-gradient(circle at 0 0,
+            rgba(0, 0, 0, 1) 0,
+            transparent 1px,
+            transparent 3px);
+
+    background-size: 5px 5px;
+
+    mix-blend-mode: multiply;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.ticket-page {
+    position: relative;
+
+    z-index: 20;
+
+    min-height: 600px;
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 3rem 2rem;
+
+    padding: 90px 2rem 3rem;
+
+    perspective: 1000px;
+}
+
+.ticket-status {
+    color: #cbf163;
+    font-family: Inter, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.ticket-back {
+    position: absolute;
+
+    top: 25px;
+    left: 30px;
+
+    z-index: 100;
+
+    padding: 10px 18px;
+
+    border-radius: 999px;
+
+    border:
+        1px solid rgba(203, 241, 99, 0.35);
+
+    background:
+        rgba(16, 25, 15, 0.72);
+
+    backdrop-filter: blur(12px);
+
+    color: #cbf163;
+
+    font-family: Inter, sans-serif;
+
+    font-size: 0.8rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.ticket-back:hover {
+    transform: translateY(-2px);
+
+    background: #cbf163;
+
+    color: #162016;
+
+    box-shadow:
+        0 8px 25px rgba(203, 241, 99, 0.25);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .ticket-card {
+        --width: 190px;
+        --height: 350px;
+
+        transform: scale(0.95);
+    }
+
+    .ticket-header {
+        font-size: 2.25rem;
+    }
+
+    .ticket-page {
+        min-height: 520px;
+    }
+
+    .ticket-back {
+        top: 15px;
+        left: 15px;
+    }
+}
+
+/* Player valuation cards */
+.ticket-page {
+    align-items: flex-start;
+    gap: 2.5rem 2rem;
+    padding: 92px 2rem 4rem;
+    perspective: 1200px;
+}
+
+.ticket-status {
+    margin-top: 5rem;
+    color: #cbf163;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.player-card {
+    --card-green: #cbf163;
+    position: relative;
+    display: grid;
+    width: min(360px, 90vw);
+    min-height: 540px;
+    padding: 28px;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(203, 241, 99, 0.45);
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(203, 241, 99, 0.08), transparent 35%), repeating-linear-gradient(90deg, #111b14 0, #111b14 3px, #0b120d 4px, #111b14 7px);
+    box-shadow: inset 0 0 0 7px #0b120d, inset 0 0 0 9px rgba(203, 241, 99, 0.22), inset 0 0 34px rgba(203, 241, 99, 0.1), 0 22px 45px rgba(0, 0, 0, 0.4);
+    color: #e8f3dc;
+    font-family: "Josefin Sans", sans-serif;
+    transform-style: preserve-3d;
+    animation: player-card-idle 7s ease-in-out infinite;
+}
+
+.player-card:hover {
+    border-color: rgba(203, 241, 99, 0.8);
+    transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+}
+
+.player-card__glow {
+    position: absolute;
+    inset: -40%;
+    z-index: -1;
+    background: conic-gradient(from 30deg, transparent, rgba(203, 241, 99, 0.16), transparent 35%);
+    animation: player-card-glow 8s linear infinite;
+}
+
+.player-card__rarity {
+    position: absolute;
+    top: 25px;
+    right: 28px;
+    color: var(--card-green);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.player-card__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding-top: 7px;
+    color: #90a58c;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.player-card__index {
+    color: rgba(203, 241, 99, 0.6);
+}
+
+.player-card__art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 170px;
+    overflow: hidden;
+    border: 1px solid rgba(203, 241, 99, 0.28);
+    border-radius: 16px;
+    background: radial-gradient(circle at 50% 30%, rgba(203, 241, 99, 0.22), transparent 28%), linear-gradient(145deg, #1d3320, #070d09 70%);
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.6);
+}
+
+.player-card__art::before,
+.player-card__art::after {
+    content: "";
+    position: absolute;
+    width: 160%;
+    height: 1px;
+    background: rgba(203, 241, 99, 0.17);
+    transform: rotate(-25deg);
+}
+
+.player-card__art::after {
+    transform: rotate(25deg);
+}
+
+.player-card__initials {
+    z-index: 1;
+    color: var(--card-green);
+    font-size: 5rem;
+    font-weight: 900;
+    letter-spacing: -0.08em;
+    text-shadow: 0 0 28px rgba(203, 241, 99, 0.3);
+}
+
+.player-card__position {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    z-index: 1;
+    padding: 5px 8px;
+    border: 1px solid rgba(203, 241, 99, 0.3);
+    border-radius: 4px;
+    background: rgba(5, 12, 7, 0.78);
+    color: #d8e9cb;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.player-card__name-block {
+    margin: 20px 0 16px;
+}
+
+.player-card__name-block h2 {
+    margin: 0;
+    color: #f0f7ea;
+    font-size: clamp(1.35rem, 5vw, 1.7rem);
+    font-weight: 800;
+}
+
+.player-card__name-block p {
+    margin: 6px 0 0;
+    color: #91a88d;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.player-card__stats,
+.player-card__details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.player-card__stats div,
+.player-card__details div {
+    min-width: 0;
+    padding: 11px 8px;
+    border: 1px solid rgba(203, 241, 99, 0.18);
+    border-radius: 8px;
+    background: rgba(5, 12, 7, 0.62);
+    text-align: center;
+}
+
+.player-card__stats span,
+.player-card__details span,
+.player-card__value span {
+    display: block;
+    color: #82977e;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.player-card__stats strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--card-green);
+    font-size: 1.35rem;
+}
+
+.player-card__details {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 8px;
+}
+
+.player-card__details strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 5px;
+    color: #dcebd5;
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.player-card__value {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-top: 1px solid rgba(203, 241, 99, 0.25);
+    border-bottom: 1px solid rgba(203, 241, 99, 0.25);
+}
+
+.player-card__value strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--card-green);
+    font-size: 1.5rem;
+}
+
+.player-card__footer {
+    align-self: end;
+    margin-top: 17px;
+    color: #6f866d;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+}
+
+@keyframes player-card-idle {
+
+    0%,
+    100% {
+        transform: translateY(0) rotateX(2deg) rotateZ(-1deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotateX(-2deg) rotateZ(1deg);
+    }
+}
+
+@keyframes player-card-glow {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .player-card,
+    .player-card__glow {
+        animation: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .ticket-page {
+        gap: 1.5rem;
+        padding: 82px 1rem 3rem;
+    }
+
+    .player-card {
+        min-height: 510px;
+        padding: 24px;
+    }
+}
