@@ -1,7 +1,7 @@
 .price-card {
   position: relative;
-  width: 350px;
-  margin-left: 360px;
+  width: min(350px, 90vw);
+  margin: 2rem auto;
   background-color: #0a0a0a;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -10,6 +10,7 @@
   overflow: hidden;
   color: #fff;
   border: 1px solid #1f1f1f;
+  box-sizing: border-box;
 }
 
 .price-card-glow {

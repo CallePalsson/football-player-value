@@ -219,5 +219,22 @@ body {
   display: flex;
   flex-direction: column;
   align-self: center;
-  width: 650px;
+  width: 100%;
+  max-width: 650px;
+}
+
+/* Formuläret ligger centrerat i mitten, plånboken hakar på till höger på stora skärmar */
+.hero-row {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 3rem auto 2rem;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .hero-row {
+    margin-top: 2rem;
+  }
 }
