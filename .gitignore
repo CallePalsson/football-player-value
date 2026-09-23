@@ -16,3 +16,6 @@ Thumbs.db
 
 # Generated data/models
 models/
+
+#CSV 
+*.csv
