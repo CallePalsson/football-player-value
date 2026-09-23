@@ -175,11 +175,12 @@ function App() {
       ) : !isEvaluated ? (
 
         <>
+          <div className="hero-row">
           <div className="login-box">
             <p>Valuation</p>
             <form onSubmit={handleGetValuation}>
               <div className="user-box">
-                <input required name="player_name" type="text" />
+                <input required="" name="player_name" type="text" />
                 <label>Player name</label>
               </div>
               <div className="user-box">
@@ -363,6 +364,7 @@ function App() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </>
       ) : (
