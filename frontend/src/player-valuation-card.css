@@ -1,0 +1,413 @@
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 390px));
+    justify-content: center;
+    gap: 28px;
+    width: 100%;
+    padding: 24px 16px 48px;
+    box-sizing: border-box;
+}
+
+.valuation-card {
+    --lime: #c9ff25;
+    --ink: #080b07;
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    aspect-ratio: 0.68;
+    min-height: 590px;
+    color: #f5f8e9;
+    text-align: left;
+    filter: drop-shadow(0 0 12px rgba(176, 255, 24, 0.32)) drop-shadow(0 20px 28px rgba(0, 0, 0, 0.48));
+    transition: transform 260ms ease, filter 260ms ease;
+    animation: valuation-card-in 700ms both ease-out;
+}
+
+.valuation-card:hover {
+    transform: translateY(-7px);
+    filter: drop-shadow(0 0 20px rgba(198, 255, 31, 0.58)) drop-shadow(0 26px 30px rgba(0, 0, 0, 0.54));
+}
+
+.valuation-card__foil,
+.valuation-card__inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+}
+
+.valuation-card__foil {
+    padding: 3px;
+    background: conic-gradient(from 130deg, #f7ffb2, #1a260d 14%, #efff55 29%, #5d6e3b 41%, #f1f5cf 54%, #26370e 66%, #b8e82c 82%, #f7ffb2);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.95;
+    animation: valuation-foil 9s linear infinite;
+}
+
+.valuation-card__inner {
+    overflow: hidden;
+    background:
+        linear-gradient(150deg, rgba(202, 255, 37, 0.13), transparent 17%),
+        radial-gradient(circle at 50% 25%, rgba(139, 255, 22, 0.17), transparent 38%),
+        linear-gradient(180deg, #1b2613 0%, var(--ink) 34%, #11170d 100%);
+    border: 1px solid rgba(213, 255, 70, 0.5);
+    box-shadow: inset 0 0 0 6px rgba(5, 8, 4, 0.78), inset 0 0 35px rgba(158, 255, 31, 0.24);
+}
+
+.valuation-card__inner::before,
+.valuation-card__inner::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+}
+
+.valuation-card__inner::before {
+    inset: 10px;
+    border: 1px solid rgba(202, 255, 37, 0.66);
+    clip-path: polygon(0 0, 38% 0, 42% 2%, 58% 2%, 62% 0, 100% 0, 100% 100%, 0 100%);
+    border-radius: 20px;
+}
+
+.valuation-card__inner::after {
+    inset: 0;
+    opacity: 0.18;
+    background-image: radial-gradient(rgba(220, 255, 102, 0.7) 0.7px, transparent 0.7px);
+    background-size: 5px 5px;
+    mix-blend-mode: screen;
+}
+
+.valuation-header {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 27px 0;
+    font: 700 9px/1.3 'Trebuchet MS', sans-serif;
+    letter-spacing: 2.2px;
+    color: #e8f0cd;
+}
+
+.valuation-header span:last-child {
+    text-align: right;
+    color: var(--lime);
+}
+
+.valuation-header b {
+    font-size: 8px;
+}
+
+.valuation-artwork {
+    position: relative;
+    height: 45%;
+    min-height: 260px;
+    overflow: hidden;
+    margin-top: -3px;
+    background: radial-gradient(ellipse at 50% 58%, rgba(175, 255, 30, 0.45), transparent 44%), linear-gradient(155deg, transparent 20%, rgba(200, 255, 40, 0.1), transparent 70%);
+}
+
+.valuation-artwork::before,
+.valuation-artwork::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--lime));
+    box-shadow: 0 0 8px var(--lime);
+}
+
+.valuation-artwork::before {
+    left: -4%;
+    transform: rotate(-29deg);
+}
+
+.valuation-artwork::after {
+    right: -4%;
+    transform: rotate(29deg) scaleX(-1);
+}
+
+.valuation-stadium-lights {
+    position: absolute;
+    inset: 22% 5% auto;
+    height: 35%;
+    background: radial-gradient(circle, #f4ffc7 0 2px, transparent 3px) 0 80% / 34px 34px repeat-x;
+    opacity: 0.7;
+    transform: perspective(180px) rotateX(48deg);
+    filter: blur(0.5px) drop-shadow(0 0 8px var(--lime));
+}
+
+.valuation-initials {
+    position: absolute;
+    inset: 16% 0 auto;
+    color: rgba(238, 255, 185, 0.2);
+    font: 900 clamp(130px, 28vw, 190px)/0.8 Impact, sans-serif;
+    letter-spacing: -12px;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(199, 255, 31, 0.8), 4px 4px 0 rgba(255, 255, 255, 0.16);
+    animation: valuation-initials 1.2s both ease-out;
+}
+
+.valuation-player {
+    position: absolute;
+    inset: 10% 16% -5%;
+    filter: drop-shadow(0 0 8px var(--lime));
+    animation: valuation-player-in 800ms 100ms both ease-out;
+}
+
+.valuation-player__head {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 32%;
+    width: 36%;
+    height: 42%;
+    border-radius: 48% 48% 42% 42%;
+    background: radial-gradient(circle at 35% 25%, #26301c, #020301 62%);
+    box-shadow: 0 0 0 3px rgba(207, 255, 38, 0.7), inset -10px -12px 18px #000;
+}
+
+.valuation-player__neck {
+    position: absolute;
+    top: 33%;
+    left: 38%;
+    width: 24%;
+    height: 18%;
+    background: #080b06;
+}
+
+.valuation-player__torso {
+    position: absolute;
+    top: 42%;
+    left: 9%;
+    width: 82%;
+    height: 60%;
+    clip-path: polygon(28% 0, 72% 0, 100% 32%, 87% 100%, 13% 100%, 0 32%);
+    background: linear-gradient(160deg, #313a28, #070a06 32%, #1b2315 75%, #030403);
+    box-shadow: inset 0 0 25px #000, 0 0 0 2px rgba(202, 255, 37, 0.7);
+}
+
+.valuation-player__torso::after {
+    content: '';
+    position: absolute;
+    inset: 8% 15%;
+    border-top: 2px solid var(--lime);
+    transform: rotate(-8deg);
+    opacity: 0.8;
+}
+
+.valuation-player__arm {
+    position: absolute;
+    top: 48%;
+    width: 25%;
+    height: 58%;
+    background: linear-gradient(160deg, #303827, #070906 55%, #222b1a);
+    box-shadow: inset 0 0 14px #000, 0 0 0 2px rgba(202, 255, 37, 0.6);
+}
+
+.valuation-player__arm--left {
+    left: 0;
+    transform: rotate(28deg);
+    clip-path: polygon(35% 0, 100% 12%, 76% 100%, 0 76%);
+}
+
+.valuation-player__arm--right {
+    right: 0;
+    transform: rotate(-21deg);
+    clip-path: polygon(0 12%, 65% 0, 100% 76%, 24% 100%);
+}
+
+.valuation-artwork-position {
+    position: absolute;
+    z-index: 3;
+    right: 10px;
+    bottom: 30%;
+    color: rgba(232, 255, 177, 0.55);
+    font: 8px/1.45 'Trebuchet MS', sans-serif;
+    letter-spacing: 2px;
+}
+
+.valuation-nameplate {
+    position: relative;
+    z-index: 3;
+    margin: -3px 18px 8px;
+    padding: 7px 10px 4px;
+    text-align: center;
+    background: linear-gradient(100deg, transparent, rgba(8, 13, 7, 0.95) 10%, rgba(8, 13, 7, 0.95) 90%, transparent);
+    border-block: 2px solid var(--lime);
+    box-shadow: 0 0 12px rgba(198, 255, 31, 0.5);
+}
+
+.valuation-nameplate h2 {
+    overflow: hidden;
+    margin: 0;
+    color: #f5f6ed;
+    font: 900 clamp(20px, 5vw, 30px)/1.05 'Trebuchet MS', sans-serif;
+    letter-spacing: -1px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.valuation-nameplate p {
+    margin: 5px 0 0;
+    color: #bac3ae;
+    font: 11px/1 'Trebuchet MS', sans-serif;
+    letter-spacing: 5px;
+}
+
+.valuation-stats {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    gap: 5px;
+    margin: 0 17px 5px;
+}
+
+.valuation-stats--top {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.valuation-stats--bottom {
+    grid-template-columns: 1fr 1.35fr;
+}
+
+.valuation-stat {
+    min-width: 0;
+    padding: 9px 5px 7px;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(28, 38, 20, 0.98), rgba(4, 7, 4, 0.98));
+    border: 1px solid rgba(202, 255, 37, 0.85);
+    clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+    box-shadow: inset 0 0 10px rgba(194, 255, 37, 0.15);
+}
+
+.valuation-stat span {
+    display: block;
+    overflow: hidden;
+    color: #c8d0bc;
+    font: 8px/1.2 'Trebuchet MS', sans-serif;
+    letter-spacing: 1.5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.valuation-stat strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 4px;
+    color: #f7f9f0;
+    font: 900 clamp(16px, 4vw, 21px)/1.1 'Trebuchet MS', sans-serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.valuation-stat--accent strong {
+    color: var(--lime);
+    text-shadow: 0 0 8px rgba(202, 255, 37, 0.6);
+}
+
+.valuation-market-value {
+    position: relative;
+    z-index: 3;
+    margin: 10px 25px 0;
+    padding: 7px 0 11px;
+    text-align: center;
+    border-block: 1px solid rgba(202, 255, 37, 0.65);
+}
+
+.valuation-market-value span {
+    display: block;
+    color: #bbc5ad;
+    font: 9px/1.2 'Trebuchet MS', sans-serif;
+    letter-spacing: 3px;
+}
+
+.valuation-market-value strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--lime);
+    font: 900 clamp(22px, 6vw, 31px)/1 'Trebuchet MS', sans-serif;
+    letter-spacing: -1px;
+    text-shadow: 0 0 12px rgba(202, 255, 37, 0.75);
+    white-space: nowrap;
+}
+
+.valuation-footer {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin: 13px 25px 0;
+    color: #acb59c;
+    font: 8px/1 'Trebuchet MS', sans-serif;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.valuation-footer i {
+    display: block;
+    height: 1px;
+    flex: 1;
+    background: var(--lime);
+    box-shadow: 0 0 5px var(--lime);
+}
+
+@keyframes valuation-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes valuation-player-in {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes valuation-initials {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes valuation-foil {
+    from {
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        filter: hue-rotate(35deg);
+    }
+}
+
+@media (max-width: 480px) {
+    .player-grid {
+        grid-template-columns: minmax(280px, 390px);
+        padding-inline: 10px;
+    }
+
+    .valuation-card {
+        min-height: 540px;
+    }
+}
