@@ -396,7 +396,6 @@ function App() {
               </div>
               <div>
                 <p className="price-card-title">Price Prediction</p>
-                <p className="price-card-subtitle">Calle Pålsson</p>
               </div>
             </div>
 
